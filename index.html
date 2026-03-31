@@ -2298,16 +2298,7 @@ function RemoveBlackScreenAndStartAZKAR()
 RemoveBlackScreen();
 
 // info : ISHRAQ  not coming here
-
-
-	if(JS_APP_AZKAR_ACTIVE)
-	{
-	setTimeout('SartMainAZKAR()', 7000 );
-	}
-	else	{
-			JS_CONTINUE_AZKARING = true; 
-			CheckAzkarToSHOW();
-			}
+setTimeout('ShowFixedHRSlide15min()', 7000);
 
 }
 
@@ -2623,8 +2614,7 @@ function Close5minPIC()
 {
 HideZunder2('VR5MIN');
 HideZunder2('HR5MIN');
-JS_CONTINUE_AZKARING = true; 
-CheckAzkarToSHOW();
+ShowFixedHRSlide15min();
 }
 
 
@@ -2639,6 +2629,26 @@ if(JS_SLIDES_RUNNING) return; // only one runing slides
 JS_SLIDES_RUNNING =  true;
 JS_SLIDES_ForceEND = false;
 ShowOneFixedSlide10min();
+}
+
+//-----ShowFIXED_HR_SLIDE___during_15min---------------
+function ShowFixedHRSlide15min()
+{
+if(JS_SLIDES_RUNNING) return;
+JS_SLIDES_RUNNING =  true;
+JS_SLIDES_ForceEND = false;
+
+JS_sVmes1.innerHTML = '';
+JS_sHmes1.innerHTML = '';
+JS_VRSLIDES.style.background = 'url(./slides/hr.jpg)';
+JS_HRSLIDES.style.background = 'url(./slides/hr.jpg)';
+JS_VRSLIDES.style.backgroundRepeat= 'no-repeat';
+JS_HRSLIDES.style.backgroundRepeat= 'no-repeat';
+JS_VRSLIDES.style.backgroundSize= '100% 100%';
+JS_HRSLIDES.style.backgroundSize= '100% 100%';
+
+DisplaySLIDES();
+setTimeout("CloseFixedSlide10min()", (60000 * 15)); // close after 15 min
 }
 
 //-----ShowFIXED_1_SLIDE___during_10min---------------
