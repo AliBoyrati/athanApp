@@ -2668,7 +2668,51 @@ function StartSLIDES()
 if(JS_SLIDES_RUNNING) return; // only one runing slides
 JS_SLIDES_RUNNING =  true;
 JS_SLIDES_ForceEND = false;
-ProcessSLIDESShow();
+ShowOneFixedSlide10min();
+}
+
+//-----ShowFIXED_1_SLIDE___during_10min---------------
+function ShowOneFixedSlide10min()
+{
+var sTEXT = '';
+
+	for (var i=0; i < JS_SLIDES_DATA.length; i++)
+	{
+		if(JS_SLIDES_DATA[i].indexOf('.jpg') > -1)
+		{
+		sTEXT = JS_SLIDES_DATA[i];
+		break;
+		}
+	}
+
+	JS_sVmes1.innerHTML = '';
+	JS_sHmes1.innerHTML = '';
+
+	if(sTEXT !== '')
+	{
+	JS_VRSLIDES.style.background = 'url(./slides/' + sTEXT + ')';
+	JS_HRSLIDES.style.background = 'url(./slides/' + sTEXT + ')';
+	}
+	else
+	{
+	JS_VRSLIDES.style.background = 'url(./slides/vr.jpg)';
+	JS_HRSLIDES.style.background = 'url(./slides/hr.jpg)';
+	}
+
+	JS_VRSLIDES.style.backgroundRepeat= 'no-repeat';
+	JS_HRSLIDES.style.backgroundRepeat= 'no-repeat';
+	JS_VRSLIDES.style.backgroundSize= '100% 100%';
+	JS_HRSLIDES.style.backgroundSize= '100% 100%';
+
+	DisplaySLIDES();
+	setTimeout("CloseFixedSlide10min()", (60000 * 10)); // close after 10 min
+}
+
+//-------CloseFixedSlide10min---------------
+function CloseFixedSlide10min()
+{
+	JS_SLIDES_RUNNING = false;
+	FinishSLIDES();
 }
 
 
