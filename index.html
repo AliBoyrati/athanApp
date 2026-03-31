@@ -2541,6 +2541,7 @@ function ProcessSLIDESShow()
 var sTEXT = JS_SLIDES_DATA[JS_SLIDES_NEXT];
 
 var sJS_MSC_VIEWING = 15000;
+var guardCounter = 0;
 
 
 	if(sTEXT == "")
@@ -2564,8 +2565,19 @@ var sJS_MSC_VIEWING = 15000;
 	return;
 	}
 
-	if(sTEXT.indexOf('.jpg') > -1)
+	while(sTEXT.indexOf('.jpg') == -1)
 	{
+	JS_SLIDES_NEXT++;
+	if(JS_SLIDES_NEXT >= JS_SLIDES_DATA.length) JS_SLIDES_NEXT = 0;
+	sTEXT = JS_SLIDES_DATA[JS_SLIDES_NEXT];
+	guardCounter++;
+	if(guardCounter >= JS_SLIDES_DATA.length)
+	{
+		CloseFixedSlide10min();
+		return;
+	}
+	}
+
 	JS_SLIDES_NEXT++;
 	JS_sVmes1.innerHTML = '';
 	JS_sHmes1.innerHTML = '';
@@ -2579,48 +2591,6 @@ var sJS_MSC_VIEWING = 15000;
 	setTimeout("ProcessSLIDESShow()", sJS_MSC_VIEWING); // repeat action
 	setTimeout("FinishSLIDES()",  sJS_MSC_VIEWING - 5500);
 	return;
-	}
-else
-	{
-	JS_VRSLIDES.style.background = 'url(./slides/vr.jpg)';
-	JS_VRSLIDES.style.backgroundRepeat= 'no-repeat'; 
-	JS_VRSLIDES.style.backgroundSize= '100% 100%';
-	JS_HRSLIDES.style.background = 'url(./slides/hr.jpg)';
-	JS_HRSLIDES.style.backgroundRepeat= 'no-repeat'; 
-	JS_HRSLIDES.style.backgroundSize= '100% 100%';
-	}
-
-
-
-sTEXT 		= sTEXT.replace(/\|/g, "<br>");
-var nSize	= sTEXT.length;
-
-
-	switch(true)
-	{
-	  case nSize<=50 	:	JS_sHmes1.style.fontSize = '6.0vw';	JS_sVmes1.style.fontSize = '8.5vw';	sJS_MSC_VIEWING = 10000;	JS_sHmes1.style.lineHeight = '1.60em';	break;
-	  case nSize<=100 	:	JS_sHmes1.style.fontSize = '5.3vw';	JS_sVmes1.style.fontSize = '8.0vw';	sJS_MSC_VIEWING = 12000;	JS_sHmes1.style.lineHeight = '1.70em';	break;
-	  case nSize<=150 	:	JS_sHmes1.style.fontSize = '5.2vw';	JS_sVmes1.style.fontSize = '7.5vw';	sJS_MSC_VIEWING = 14000;	JS_sHmes1.style.lineHeight = '1.80em';	break;
-	  case nSize<=200 	:	JS_sHmes1.style.fontSize = '5.0vw';	JS_sVmes1.style.fontSize = '7.0vw';	sJS_MSC_VIEWING = 15000;	JS_sHmes1.style.lineHeight = '1.90em';	break;
-	  case nSize<=250 	:	JS_sHmes1.style.fontSize = '4.5vw';	JS_sVmes1.style.fontSize = '6.5vw';	sJS_MSC_VIEWING = 16000;	JS_sHmes1.style.lineHeight = '2.00em';	break;
-	  case nSize<=300 	:	JS_sHmes1.style.fontSize = '4.0vw';	JS_sVmes1.style.fontSize = '6.0vw';	sJS_MSC_VIEWING = 18000;	JS_sHmes1.style.lineHeight = '2.10em';	break;
-	  case nSize<=350 	:	JS_sHmes1.style.fontSize = '3.5vw';	JS_sVmes1.style.fontSize = '6.0vw';	sJS_MSC_VIEWING = 20000;	JS_sHmes1.style.lineHeight = '2.20em';	break;
-	  case nSize<=400 	:	JS_sHmes1.style.fontSize = '3.0vw';	JS_sVmes1.style.fontSize = '5.9vw';	sJS_MSC_VIEWING = 21000;	JS_sHmes1.style.lineHeight = '2.30em';	break;
-	  case nSize<=450 	:	JS_sHmes1.style.fontSize = '3.0vw';	JS_sVmes1.style.fontSize = '5.6vw';	sJS_MSC_VIEWING = 24000;	JS_sHmes1.style.lineHeight = '2.40em';	break;
-	  case nSize<=500 	:	JS_sHmes1.style.fontSize = '3.0vw';	JS_sVmes1.style.fontSize = '5.1vw';	sJS_MSC_VIEWING = 26000;	JS_sHmes1.style.lineHeight = '2.50em';	break;
-	  default			: 	JS_sHmes1.style.fontSize = '3.0vw'; JS_sVmes1.style.fontSize = '5.0vw';	sJS_MSC_VIEWING = 20000;	JS_sHmes1.style.lineHeight = '2.10em';	break;
-	}
-
-
-
-//dolog(" |"+sTEXT.length);
-JS_sVmes1.innerHTML = sTEXT;
-JS_sHmes1.innerHTML = sTEXT;
-JS_sVmes1.style.lineHeight = JS_sHmes1.style.lineHeight;
-JS_SLIDES_NEXT++;
-DisplaySLIDES();
-setTimeout("ProcessSLIDESShow()", sJS_MSC_VIEWING); // repeat action
-setTimeout("FinishSLIDES()",  sJS_MSC_VIEWING - 5500);
 }
 
 
