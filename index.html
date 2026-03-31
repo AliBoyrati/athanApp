@@ -127,91 +127,73 @@ var JS_SLIDES_NEXT = 0;
 var tempo = 0;
 var JS_LOGS_ENABLED	= false;
 
-tempo = localStorage.getItem('STORAGE_JOMOA_DIM_BEFORE');	if(tempo) {JS_JOMOA_DIM_MINIUTES_BEFORE = parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_JOMOA_DIM_AFTER');	if(tempo) {JS_JOMOA_DIM_MINIUTES_AFTER 	= parseInt(tempo);}
+function readStorageText(key, fallbackValue)
+{
+	var value = localStorage.getItem(key);
+	return (value === null || value === '') ? fallbackValue : value;
+}
 
+function readStorageInt(key, fallbackValue)
+{
+	var value = localStorage.getItem(key);
+	if(value === null || value === '') return fallbackValue;
+	var parsed = parseInt(value, 10);
+	return isNaN(parsed) ? fallbackValue : parsed;
+}
 
-var JS_AUDIO_AZAN_IQAMA_IS_BY_VOICE = true;
-var eetempo = localStorage.getItem('STORAGE_AUDIO_BY_VOICE');
-if(eetempo == '1') JS_AUDIO_AZAN_IQAMA_IS_BY_VOICE	= true;
+function readStorageToggle(key, enabledValue, fallbackValue)
+{
+	var value = localStorage.getItem(key);
+	if(value === null) return fallbackValue;
+	return value === enabledValue;
+}
 
+JS_JOMOA_DIM_MINIUTES_BEFORE = readStorageInt('STORAGE_JOMOA_DIM_BEFORE', JS_JOMOA_DIM_MINIUTES_BEFORE);
+JS_JOMOA_DIM_MINIUTES_AFTER = readStorageInt('STORAGE_JOMOA_DIM_AFTER', JS_JOMOA_DIM_MINIUTES_AFTER);
 
-var JS_SHORT_AZAN_ACTIVE = false;
-var eetempo = localStorage.getItem('STORAGE_JS_SHORT_AZAN_ACTIVE');
-if(eetempo == '1') JS_SHORT_AZAN_ACTIVE	= true;
+var JS_AUDIO_AZAN_IQAMA_IS_BY_VOICE = readStorageToggle('STORAGE_AUDIO_BY_VOICE', '1', true);
+var JS_SHORT_AZAN_ACTIVE = readStorageToggle('STORAGE_JS_SHORT_AZAN_ACTIVE', '1', false);
+var JS_SHORT_IQAMA_ACTIVE = readStorageToggle('STORAGE_JS_SHORT_IQAMA_ACTIVE', '1', false);
+var JS_ARABIC_DIGITS = readStorageToggle('STORAGE_ARABIC_DIGITS', '1', false);
+var JS_RAMADAN_30MIN_ACTIVE = readStorageToggle('STORAGE_RAMADAN_30MIN_ACTIVE', '1', false);
+var JS_SUMMER_ADD1HOUR = readStorageToggle('STORAGE_SUMMER_ADD1HOUR', '1', false);
+var JS_1HOURMORE = readStorageToggle('STORAGE_JS_1HOURMORE', '1', false);
+var JS_1LESSMORE = readStorageToggle('STORAGE_JS_1LESSMORE', '1', false);
+var JS_24H_ACTIVE = readStorageToggle('STORAGE_24H_ACTIVE', '0', true);
+var JS_FULL_CLOCK_ACTIVE = readStorageToggle('STORAGE_FULL_CLOCK_ACTIVE', '1', false);
+var JS_DIMM_WHILE_PRAYIN_ACTIVE = readStorageToggle('STORAGE_DIMM_SCREEN', '1', true);
+var JS_APP_AZKAR_ACTIVE = readStorageToggle('STORAGE_AZKAR_ACTIVE', '1', true);
+var JS_USER_SLIDERS_ACTIVE = readStorageToggle('STORAGE_SLIDERS_ACTIVE', '1', false);
+var JS_PAST_DIMER_ACTIVE = readStorageToggle('STORAGE_PAST_DIMER_ACTIVE', '1', true);
+var JS_IQAMA_FULL_TIMES = readStorageToggle('STORAGE_IQAMA_FULL_TIMES', '1', true);
+var JS_IQAMA_COUNTDOWN_ACTIVE = readStorageToggle('STORAGE_IQAMA_COUNTDOWN_ACTIVE', '1', true);
 
-var JS_SHORT_IQAMA_ACTIVE = false;
-var eetempo = localStorage.getItem('STORAGE_JS_SHORT_IQAMA_ACTIVE');
-if(eetempo == '1') JS_SHORT_IQAMA_ACTIVE	= true;
+var prayerOffsetSettings = [
+	{storageKey: 'STORAGE_AZAN_FAJR', targetKey: 'JS_ATHAN_MINUTES_OF_FAJR'},
+	{storageKey: 'STORAGE_AZAN_SHRQ', targetKey: 'JS_ATHAN_MINUTES_OF_SHRQ'},
+	{storageKey: 'STORAGE_AZAN_DOHR', targetKey: 'JS_ATHAN_MINUTES_OF_DOHR'},
+	{storageKey: 'STORAGE_AZAN_ASR', targetKey: 'JS_ATHAN_MINUTES_OF_ASR'},
+	{storageKey: 'STORAGE_AZAN_MAGHRIB', targetKey: 'JS_ATHAN_MINUTES_OF_MAGHRIB'},
+	{storageKey: 'STORAGE_AZAN_ISHA', targetKey: 'JS_ATHAN_MINUTES_OF_ISHA'}
+];
+for(var i = 0; i < prayerOffsetSettings.length; i++)
+{
+	var prayerOffset = prayerOffsetSettings[i];
+	window[prayerOffset.targetKey] = readStorageInt(prayerOffset.storageKey, window[prayerOffset.targetKey]);
+}
 
-var JS_ARABIC_DIGITS = false;
-var eetempo = localStorage.getItem('STORAGE_ARABIC_DIGITS');
-if(eetempo == '1') JS_ARABIC_DIGITS	= true;
-
-var JS_RAMADAN_30MIN_ACTIVE = false;
-var eetempo = localStorage.getItem('STORAGE_RAMADAN_30MIN_ACTIVE');
-if(eetempo == '1') JS_RAMADAN_30MIN_ACTIVE	= true;
-
-var JS_SUMMER_ADD1HOUR = false;
-var eetempo = localStorage.getItem('STORAGE_SUMMER_ADD1HOUR');
-if(eetempo == '1') JS_SUMMER_ADD1HOUR	= true;
-
-var JS_1HOURMORE = false;
-var eetempo = localStorage.getItem('STORAGE_JS_1HOURMORE');
-if(eetempo == '1') JS_1HOURMORE	= true;
-
-var JS_1LESSMORE = false;
-var eetempo = localStorage.getItem('STORAGE_JS_1LESSMORE');
-if(eetempo == '1') JS_1LESSMORE	= true;
-
-var JS_24H_ACTIVE = true;
-var eetempo = localStorage.getItem('STORAGE_24H_ACTIVE');
-if(eetempo == '1') JS_24H_ACTIVE = false;
-
-
-var JS_FULL_CLOCK_ACTIVE = false;
-var eetempo = localStorage.getItem('STORAGE_FULL_CLOCK_ACTIVE');
-if(eetempo == '1') JS_FULL_CLOCK_ACTIVE = true;
-
-var JS_DIMM_WHILE_PRAYIN_ACTIVE = true;
-var eetempo = localStorage.getItem('STORAGE_DIMM_SCREEN');
-if(eetempo == '0') JS_DIMM_WHILE_PRAYIN_ACTIVE	= false;
-
-
-
-var JS_APP_AZKAR_ACTIVE = true;
-var eetempo = localStorage.getItem('STORAGE_AZKAR_ACTIVE');
-if(eetempo == '0') JS_APP_AZKAR_ACTIVE	= false;
-
-var JS_USER_SLIDERS_ACTIVE = false;
-var eetempo = localStorage.getItem('STORAGE_SLIDERS_ACTIVE');
-if(eetempo == '0') JS_USER_SLIDERS_ACTIVE = false;
-
-
-var JS_PAST_DIMER_ACTIVE = true;
-var eetempo = localStorage.getItem('STORAGE_PAST_DIMER_ACTIVE');
-if(eetempo == '1') JS_PAST_DIMER_ACTIVE	= true;
-
-var JS_IQAMA_FULL_TIMES = true;
-var eetempo = localStorage.getItem('STORAGE_IQAMA_FULL_TIMES');
-if(eetempo == '1') JS_IQAMA_FULL_TIMES	= true;
-
-var JS_IQAMA_COUNTDOWN_ACTIVE = true;
-var eetempo = localStorage.getItem('STORAGE_IQAMA_COUNTDOWN_ACTIVE');
-if(eetempo == '0') JS_IQAMA_COUNTDOWN_ACTIVE	= false;
-
-tempo = localStorage.getItem('STORAGE_AZAN_FAJR');		if(tempo) {JS_ATHAN_MINUTES_OF_FAJR 	= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_AZAN_SHRQ');		if(tempo) {JS_ATHAN_MINUTES_OF_SHRQ 	= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_AZAN_DOHR');		if(tempo) {JS_ATHAN_MINUTES_OF_DOHR 	= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_AZAN_ASR');		if(tempo) {JS_ATHAN_MINUTES_OF_ASR 		= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_AZAN_MAGHRIB');	if(tempo) {JS_ATHAN_MINUTES_OF_MAGHRIB 	= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_AZAN_ISHA');		if(tempo) {JS_ATHAN_MINUTES_OF_ISHA 	= parseInt(tempo);}
-
-tempo = localStorage.getItem('STORAGE_DURATION_FAJR');		if(tempo) {JS_PRAY_DURATION_OF_FAJR 	= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_DURATION_DOHR');		if(tempo) {JS_PRAY_DURATION_OF_DOHR 	= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_DURATION_ASR');		if(tempo) {JS_PRAY_DURATION_OF_ASR 		= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_DURATION_MAGHRIB');	if(tempo) {JS_PRAY_DURATION_OF_MAGHRIB 	= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_DURATION_ISHA');		if(tempo) {JS_PRAY_DURATION_OF_ISHA 	= parseInt(tempo);}
+var prayerDurationSettings = [
+	{storageKey: 'STORAGE_DURATION_FAJR', targetKey: 'JS_PRAY_DURATION_OF_FAJR'},
+	{storageKey: 'STORAGE_DURATION_DOHR', targetKey: 'JS_PRAY_DURATION_OF_DOHR'},
+	{storageKey: 'STORAGE_DURATION_ASR', targetKey: 'JS_PRAY_DURATION_OF_ASR'},
+	{storageKey: 'STORAGE_DURATION_MAGHRIB', targetKey: 'JS_PRAY_DURATION_OF_MAGHRIB'},
+	{storageKey: 'STORAGE_DURATION_ISHA', targetKey: 'JS_PRAY_DURATION_OF_ISHA'}
+];
+for(var j = 0; j < prayerDurationSettings.length; j++)
+{
+	var prayerDuration = prayerDurationSettings[j];
+	window[prayerDuration.targetKey] = readStorageInt(prayerDuration.storageKey, window[prayerDuration.targetKey]);
+}
 
 
 var JS_IQAMA_TIME_OF_FAJR		= 10;
@@ -221,27 +203,34 @@ var JS_IQAMA_TIME_OF_ASR		= 10;
 var JS_IQAMA_TIME_OF_MAGHRIB	= 5;
 var JS_IQAMA_TIME_OF_ISHA		= 10;
 
-tempo = localStorage.getItem('STORAGE_IQAMA_FAJR');		if(tempo) {JS_IQAMA_TIME_OF_FAJR 		= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_IQAMA_SHRQ');		if(tempo) {JS_IQAMA_TIME_OF_SHRQ 		= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_IQAMA_DOHR');		if(tempo) {JS_IQAMA_TIME_OF_DOHR 		= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_IQAMA_ASR');		if(tempo) {JS_IQAMA_TIME_OF_ASR 		= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_IQAMA_MAGHRIB');	if(tempo) {JS_IQAMA_TIME_OF_MAGHRIB 	= parseInt(tempo);}
-tempo = localStorage.getItem('STORAGE_IQAMA_ISHA');		if(tempo) {JS_IQAMA_TIME_OF_ISHA 		= parseInt(tempo);}
+var iqamaSettings = [
+	{storageKey: 'STORAGE_IQAMA_FAJR', targetKey: 'JS_IQAMA_TIME_OF_FAJR'},
+	{storageKey: 'STORAGE_IQAMA_SHRQ', targetKey: 'JS_IQAMA_TIME_OF_SHRQ'},
+	{storageKey: 'STORAGE_IQAMA_DOHR', targetKey: 'JS_IQAMA_TIME_OF_DOHR'},
+	{storageKey: 'STORAGE_IQAMA_ASR', targetKey: 'JS_IQAMA_TIME_OF_ASR'},
+	{storageKey: 'STORAGE_IQAMA_MAGHRIB', targetKey: 'JS_IQAMA_TIME_OF_MAGHRIB'},
+	{storageKey: 'STORAGE_IQAMA_ISHA', targetKey: 'JS_IQAMA_TIME_OF_ISHA'}
+];
+for(var k = 0; k < iqamaSettings.length; k++)
+{
+	var iqamaSetting = iqamaSettings[k];
+	window[iqamaSetting.targetKey] = readStorageInt(iqamaSetting.storageKey, window[iqamaSetting.targetKey]);
+}
 
 
 
 var JS_MOSQUE_NAME = "Monash Masallah";
-var STRtempo = localStorage.getItem('STORAGE_MOSQUE_NAME'); if(STRtempo) {JS_MOSQUE_NAME = STRtempo;}
+JS_MOSQUE_NAME = readStorageText('STORAGE_MOSQUE_NAME', JS_MOSQUE_NAME);
 
 var JS_BTM_WAGON   = "";
 var JS_BTM_ONE_MSG = "";
 
 var JS_CITY_CODE = "AU.CLAYTON";
-var STRtempo = localStorage.getItem('STORAGE_CITY_CODE'); if(STRtempo) {JS_CITY_CODE = STRtempo;}
+JS_CITY_CODE = readStorageText('STORAGE_CITY_CODE', JS_CITY_CODE);
 
 var JS_PERSO_FIXED_JOMOA = "13:15";
 var JS_PERSO_AUTOX_JOMOA = "";
-var STRtempo = localStorage.getItem('STORAGE_PERSO_FIXED_JOMOA'); if(STRtempo) {JS_PERSO_FIXED_JOMOA = STRtempo;}
+JS_PERSO_FIXED_JOMOA = readStorageText('STORAGE_PERSO_FIXED_JOMOA', JS_PERSO_FIXED_JOMOA);
 JS_PERSO_AUTOX_JOMOA = JS_PERSO_FIXED_JOMOA; // default fill
 
 
@@ -335,29 +324,23 @@ if(STRtempo) {JS_SLIDES_MESSAGES = STRtempo;}
 var JS_SLIDES_DATA = JS_SLIDES_MESSAGES.split("°°");
 
 var JS_MSGS_DATA = JS_ADMIN_MESSAGES.split("°°");
-var JS_FIXED_IQAMATFAJR = "";
-var STRtempo = localStorage.getItem('STORAGE_FIXED_IQAMATFAJR'); if(STRtempo) {JS_FIXED_IQAMATFAJR = STRtempo;}
-var JS_FIXED_IQAMATDOHR = "";
-var STRtempo = localStorage.getItem('STORAGE_FIXED_IQAMATDOHR'); if(STRtempo) {JS_FIXED_IQAMATDOHR = STRtempo;}
-var JS_FIXED_IQAMATASR = "";
-var STRtempo = localStorage.getItem('STORAGE_FIXED_IQAMATASR'); if(STRtempo) {JS_FIXED_IQAMATASR = STRtempo;}
-var JS_FIXED_IQAMATISHA = "";
-var STRtempo = localStorage.getItem('STORAGE_FIXED_IQAMATISHA'); if(STRtempo) {JS_FIXED_IQAMATISHA = STRtempo;}
+var JS_FIXED_IQAMATFAJR = readStorageText('STORAGE_FIXED_IQAMATFAJR', '');
+var JS_FIXED_IQAMATDOHR = readStorageText('STORAGE_FIXED_IQAMATDOHR', '');
+var JS_FIXED_IQAMATASR = readStorageText('STORAGE_FIXED_IQAMATASR', '');
+var JS_FIXED_IQAMATISHA = readStorageText('STORAGE_FIXED_IQAMATISHA', '');
 
 var JS_ACTIVE_FONTO = 'Taha';
-tempo = localStorage.getItem('STORAGE_JS_ACTIVE_FONTO');	if(tempo) {JS_ACTIVE_FONTO 	= tempo;}
+JS_ACTIVE_FONTO = readStorageText('STORAGE_JS_ACTIVE_FONTO', JS_ACTIVE_FONTO);
 
 
 var JS_METEO_LATITUDE  = -37.915047;
-var STRtempo = localStorage.getItem('STORAGE_JS_METEO_LATITUDE'); if(STRtempo) {JS_METEO_LATITUDE = STRtempo;}
+JS_METEO_LATITUDE = readStorageText('STORAGE_JS_METEO_LATITUDE', JS_METEO_LATITUDE);
 var JS_METEO_LONGITUDE  = 145.129272;
-var STRtempo = localStorage.getItem('STORAGE_JS_METEO_LONGITUDE'); if(STRtempo) {JS_METEO_LONGITUDE = STRtempo;}
+JS_METEO_LONGITUDE = readStorageText('STORAGE_JS_METEO_LONGITUDE', JS_METEO_LONGITUDE);
 
 
 
-var JS_WCSV_ACTIVE = false;
-var eetempo = localStorage.getItem('STORAGE_WCSV_ACTIVE');
-if(eetempo == '1') JS_WCSV_ACTIVE = true;
+var JS_WCSV_ACTIVE = readStorageToggle('STORAGE_WCSV_ACTIVE', '1', false);
 
 
 if(JS_WCSV_ACTIVE)
