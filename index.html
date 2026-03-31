@@ -4258,7 +4258,7 @@ function goFullSCREEN()
 GoGloballyFillDATA();
 Go1MN(false);
 launchFullscreen(document.documentElement);
-JS_SND_BEEEP.play();
+PlayAudioSafe(JS_SND_BEEEP);
 }
 
 
@@ -4266,8 +4266,23 @@ JS_SND_BEEEP.play();
 function forceAudio()
 {
 // just to trigger audio manually sounds to be accepted in browser
-JS_SND_BEEEP.play();
+PlayAudioSafe(JS_SND_BEEEP);
 HideZunder('BtnAudio');
+}
+
+//------------------------PlayAudioSafe-----------------
+function PlayAudioSafe(audioElem)
+{
+	if(!audioElem) return;
+	audioElem.muted = false;
+	audioElem.currentTime = 0;
+	var playPromise = audioElem.play();
+	if(playPromise && (typeof playPromise.catch === "function"))
+	{
+		playPromise.catch(function(err){
+			console.warn("Audio playback failed:", err);
+		});
+	}
 }
 
 
@@ -4289,7 +4304,7 @@ function Play_Beeep()
 			}
 	}
 	else 
-	JS_SND_BEEEP.play();
+	PlayAudioSafe(JS_SND_BEEEP);
 }
 
 
@@ -4388,7 +4403,7 @@ if(eeBOOL) JS_eVoiceCHECK.checked = true; else JS_eVoiceCHECK.checked = false;
 VerifyMP3Options();
 
 // to trigger sounds in browser to be accepted 
-if(JS_AUDIO_AZAN_IQAMA_IS_BY_VOICE) JS_SND_BEEEP.play();
+if(JS_AUDIO_AZAN_IQAMA_IS_BY_VOICE) PlayAudioSafe(JS_SND_BEEEP);
 }
 
 //-------------------------------------------------------------------------------------------
