@@ -4282,7 +4282,9 @@ function Play_Beeep()
 			}
 		else
 			{
-			if(JS_nowMNTS==_fjr) JS_SND_FAJR.play(); 
+			var randomAthanAudio = GetRandomAthanAudio();
+			if(randomAthanAudio) randomAthanAudio.play();
+			else if(JS_nowMNTS==_fjr) JS_SND_FAJR.play(); 
 			else JS_SND_AZAN.play();
 			}
 	}
@@ -6498,6 +6500,23 @@ var JS_SND_FAJR	 = document.getElementById('eVoiceFajr');
 // var JS_SND_SHORTIQAMA = document.getElementById('shortIqama');
 var JS_SND_BEEEP = document.getElementById('eBeeep');
 // var JS_SND_TIT   = document.getElementById('eTit');
+var JS_RANDOM_ATHAN_FILES = [
+	'audio/audio_azan.mp3',
+	'audio/audio_fajr.mp3',
+	'audio/short_azan.mp3',
+	'audio/short_iqama.mp3'
+];
+var JS_RANDOM_ATHAN_AUDIO = new Audio();
+
+function GetRandomAthanAudio()
+{
+	if(!JS_RANDOM_ATHAN_FILES.length) return null;
+	var randomIndex = Math.floor(Math.random() * JS_RANDOM_ATHAN_FILES.length);
+	JS_RANDOM_ATHAN_AUDIO.src = JS_RANDOM_ATHAN_FILES[randomIndex];
+	JS_RANDOM_ATHAN_AUDIO.currentTime = 0;
+	return JS_RANDOM_ATHAN_AUDIO;
+}
+
 var JS_1SEC_TIMER  = setInterval('LiveTime()', (1000) );
 
 
